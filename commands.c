@@ -30,21 +30,20 @@ void command(char *argv[], char *env[])
 			exit(EXIT_FAILURE);
 		}
 
-		remove_newline(cmd);
+		newline_removal(cmd);
 		if (_strlen(cmd) == 0 || _strspn(cmd, " \t\n\v\f\r") == _strlen(cmd))
 			continue;
-		_exit_shell(cmd, args);
 		tokenize_command(cmd, args);
-		execute_and_wait(args, env, argv, count);
+		execute_and_wait(args, env, argv);
 		free_args(args);
 	}
 }
 /**
- *execute_and_wait - Forks a child process,
- *@args: Array of strings containing the command and arguments.
- *@env: Array of strings containing environment variables.
- *@argv: Array of strings containing command-line arguments.
- *
+ * execute_and_wait - Forks a child process,
+ * executes a command, and waits for the child to complete.
+ * @args: Array of strings containing the command and arguments.
+ * @env: Array of strings containing environment variables.
+ * @argv: Array of strings containing command-line arguments.
  */
 void execute_and_wait(char *args[], char *env[], char *argv[])
 {
@@ -77,12 +76,14 @@ void execute_and_wait(char *args[], char *env[], char *argv[])
 }
 
 /**
- *execute_command- executes a command using execve.
+ * execute_command - Executes a command using execve.
+ * @args: Array of strings containing the command and its arguments.
+ * @env: Array of strings containing environment variables.
+ * @command: command to execute
  *
- *@args: Array of strings containing the command and its arguments.
- *@env: Array of strings containing environment variables.
- *@command: command to execut
- *
+ * Description: Executes the command specified in the args array
+ * using the execve system call. Prints an error message if the
+ * command execution fails.
  */
 void execute_command(char *command, char *args[], char *env[])
 {
@@ -93,11 +94,15 @@ void execute_command(char *command, char *args[], char *env[])
 }
 
 /**
- *tokenize_command- tokenizes a command string into an array of strings.
+ * tokenize_command - Tokenizes a command string into an array of strings.
+ * @command: The command string to tokenize.
+ * @args: An array of strings to store the tokenized command.
  *
- *@command: The command string to tokenize.
- *@args: An array of strings to store the tokenized command.
- *
+ * Description: This function splits the input command string into tokens
+ * using space characters as delimiters. Each token is dynamically allocated
+ * using strdup and stored in the args array. The last element of the args
+ * array is set to NULL to indicate the end of the array. If memory allocation
+ * fails, an error message is printed and the program exits with EXIT_FAILURE.
  */
 void tokenize_command(char *command, char *args[])
 {
@@ -129,7 +134,9 @@ void tokenize_command(char *command, char *args[])
  *          listed in the PATH environment variable.
  * @command: The name of the command to search for.
  *
- * Return: result or NULL
+ * Return: A dynamically allocated string containing the full path
+ *         to the executable command if found,
+ *         or NULL if the command was not found in any of the directories.
  */
 char *search_command(char *command)
 {
@@ -148,7 +155,7 @@ char *search_command(char *command)
 		{
 			free(path_env_copy);
 			perror("malloc");
-			exit(errno);
+			exit(EXIT_FAILURE);
 		}
 		_strcpy(full_path, path);
 		_strcat(full_path, "/");
@@ -160,7 +167,7 @@ char *search_command(char *command)
 			{free(path_env_copy);
 				perror("strdup");
 				free(full_path);
-				exit(errno);
+				exit(EXIT_FAILURE);
 			}
 			free(path_env_copy);
 			free(full_path);
