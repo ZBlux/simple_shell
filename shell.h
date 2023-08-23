@@ -15,6 +15,10 @@
 
 extern char **environ;
 
+#define READ_BUF_SIZE 1024
+#define WRITE_BUF_SIZE 1024
+#define BUF_FLUSH -1
+
 /*Function prototypes*/
 void command(char *argv[], char *env[]);
 void execute_command(char *command, char *args[], char *env[]);
@@ -23,6 +27,8 @@ void tokenize_command(char *command, char *args[]);
 char *search_command(char *command);
 void free_args(char *argv[]);
 void newline_removal(char *str);
+int _print(char *string);
+int _print_error(char *string);
 
 int _putchar(char c);
 void _puts(char *str);

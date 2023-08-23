@@ -8,12 +8,14 @@
  */
 void free_args(char *argv[])
 {
+	int i;
+
 	if (argv == NULL)
 	{
-		return (void);
+		return;
 	}
 
-	for (int i = 0; argv[i] != NULL; i++)
+	for (i = 0; argv[i] != NULL; i++)
 	{
 		free(argv[i]);
 		argv[i] = NULL;

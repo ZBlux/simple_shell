@@ -1,4 +1,4 @@
-#include "header.h"
+#include "shell.h"
 
 /**
  *command- Implements a simple shell prompt.
