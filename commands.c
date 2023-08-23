@@ -11,6 +11,7 @@ void command(char *argv[], char *env[])
 {
 	char *cmd = NULL;
 	size_t n = 0;
+	ssize_t size;
 	char *args[] = {NULL, NULL, NULL};
 	int is_interactive = isatty(STDIN_FILENO);
 
@@ -20,7 +21,7 @@ void command(char *argv[], char *env[])
 		{
 			_print("#cisfun$ ");
 		}
-		ssize_t size = getline(&cmd, &n, stdin);
+		size = getline(&cmd, &n, stdin);
 
 		if (size == -1)
 		{
@@ -145,13 +146,14 @@ void tokenize_command(char *command, char *args[])
  */
 char *search_command(char *command)
 {
-	if (access(command, X_OK) == 0)
-		return (_strdup(command));
 	char *path_env = getenv("PATH");
 	char *path_env_copy = strdup(path_env);
 	char *path = strtok(path_env_copy, ":");
 	char *full_path = NULL;
 	char *result = NULL;
+
+	if (access(command, X_OK) == 0)
+                return (_strdup(command));
 
 	while (path != NULL)
 	{
