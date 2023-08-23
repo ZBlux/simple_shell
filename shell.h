@@ -31,6 +31,8 @@ void free_args(char *argv[]);
 void newline_removal(char *str);
 int _print(char *string);
 int _print_error(char *string);
+char *check_and_strdup(char *string);
+char *construct_full_path(char *path, char *command);
 
 int _putchar(char c);
 void _puts(char *str);

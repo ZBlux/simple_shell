@@ -99,6 +99,7 @@ void execute_command(char *command, char *args[], char *env[])
 {
 	if (execve(command, args, env) == -1)
 	{
+		perror(command);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -137,55 +138,4 @@ void tokenize_command(char *command, char *args[])
 	}
 
 	args[index] = NULL;
-}
-
-/**
- * search_command - Search for an executable command in the directories
- *          listed in the PATH environment variable.
- * @command: The name of the command to search for.
- *
- * Return: A dynamically allocated string containing the full path
- *         to the executable command if found,
- *         or NULL if the command was not found in any of the directories.
- */
-char *search_command(char *command)
-{
-	char *path_env = getenv("PATH");
-	char *path_env_copy = strdup(path_env);
-	char *path = strtok(path_env_copy, ":");
-	char *full_path = NULL;
-	char *result = NULL;
-
-	if (access(command, X_OK) == 0)
-		return (_strdup(command));
-	while (path != NULL)
-	{
-		full_path = (char *)malloc(_strlen(path) + _strlen(command) + 2);
-		if (full_path == NULL)
-		{
-			free(path_env_copy);
-			perror("malloc");
-			exit(EXIT_FAILURE);
-		}
-		_strcpy(full_path, path);
-		_strcat(full_path, "/");
-		_strcat(full_path, command);
-		if (access(full_path, X_OK) == 0)
-		{
-			result = strdup(full_path);
-			if (result == NULL)
-			{free(path_env_copy);
-				perror("strdup");
-				free(full_path);
-				exit(EXIT_FAILURE);
-			}
-			free(path_env_copy);
-			free(full_path);
-			return (result);
-		}
-		free(full_path);
-		path = strtok(NULL, ":");
-	}
-	free(path_env_copy);
-	return (NULL);
 }
