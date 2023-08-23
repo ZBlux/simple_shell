@@ -13,26 +13,36 @@ void command(char *argv[], char *env[])
 	size_t n = 0;
 	ssize_t size;
 	char *args[] = {NULL, NULL, NULL};
-	int is_interactive = isatty(STDIN_FILENO), count = 0;
+	int is_interactive = isatty(STDIN_FILENO);
 
 	while (1)
 	{
-		count++;
 		if (is_interactive)
 			_print("#cisfun$ ");
-
-
 		size = getline(&cmd, &n, stdin);
 		if (size == -1)
 		{
-			free(cmd);
-			free_args(args);
-			exit(EXIT_FAILURE);
+			if (feof(stdin))
+			{
+				free(cmd);
+				free_args(args);
+				exit(EXIT_SUCCESS);
+			}
+			else
+			{
+				free_args(args);
+				free(cmd);
+				exit(EXIT_FAILURE);
+			}
 		}
-
 		newline_removal(cmd);
 		if (_strlen(cmd) == 0 || _strspn(cmd, " \t\n\v\f\r") == _strlen(cmd))
 			continue;
+		if (strcmp(cmd, "exit") == 0)
+		{	free_args(args);
+			free(cmd);
+			exit(EXIT_SUCCESS);
+		}
 		tokenize_command(cmd, args);
 		execute_and_wait(args, env, argv);
 		free_args(args);
