@@ -18,11 +18,8 @@ void command(char *argv[], char *env[])
 	while (1)
 	{
 		if (is_interactive)
-		{
 			_print("#cisfun$ ");
-		}
 		size = getline(&cmd, &n, stdin);
-
 		if (size == -1)
 		{
 			if (feof(stdin))
@@ -153,8 +150,7 @@ char *search_command(char *command)
 	char *result = NULL;
 
 	if (access(command, X_OK) == 0)
-                return (_strdup(command));
-
+		return (_strdup(command));
 	while (path != NULL)
 	{
 		full_path = (char *)malloc(_strlen(path) + _strlen(command) + 2);
