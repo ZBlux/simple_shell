@@ -20,5 +20,4 @@ void free_args(char *argv[])
 		free(argv[i]);
 		argv[i] = NULL;
 	}
-	free(argv);
 }

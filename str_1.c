@@ -107,7 +107,6 @@ char *_strdup(const char *src)
 	}
 	else
 	{
-		free(dest);
 		return (NULL);
 	}
 
