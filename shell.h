@@ -26,9 +26,14 @@ void execute_and_wait(char *args[], char *env[], char *argv[]);
 void tokenize_command(char *command, char *args[]);
 char *search_command(char *command);
 void free_args(char *argv[]);
+void shell_exit(char *cmd, char *args[]);
 void newline_removal(char *str);
 int _print(char *string);
 int _print_error(char *string);
+void custom_error(char *cmd_name, int counter, char *error_msg);
+char *_getenv(char *name, char *env[]);
+
+
 
 int _putchar(char c);
 void _puts(char *str);
@@ -39,5 +44,7 @@ int _strspn(const char *str1, const char *str2);
 char *_strstr(char *haystack, char *needle);
 char *_strdup(const char *src);
 char *_strcat(char *dest, const char *src);
+void _itoa(int num, char *str);
+
 
 #endif
